@@ -13,10 +13,12 @@
     <servlet-name>ConsultaUsuario</servlet-name>
     <servlet-class>ConsultaServlet</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>ConsultaUsuario</servlet-name>
     <url-pattern>/consulta</url-pattern>
   </servlet-mapping>
+  
   <context-param>
     <param-name>URLBaseDeDatos</param-name>
     <param-value>jdbc:mysql://localhost/TiendaLibros?serverTimezone=UTC</param-value>
@@ -29,4 +31,18 @@
     <param-name>password</param-name>
     <param-value>1234</param-value>
   </context-param>
+  
+  <filter>
+  	<filter-name>FiltroContador</filter-name>
+  	<filter-class>FiltroContador</filter-class>
+  	<init-param>
+  		<param-name>parametro1</param-name>
+  		<param-value>valor1</param-value>
+  	</init-param>
+  </filter>
+  
+  <filter-mapping>
+  	<filter-name>FiltroContador</filter-name>
+  	<url-pattern>*.html</url-pattern>
+  </filter-mapping>
 </web-app>

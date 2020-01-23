@@ -8,6 +8,8 @@ public class ConsultaServlet extends HttpServlet {
 	private String userName;
 	private String password;
 	private String url;
+	private Integer contador;
+	private ServletContext context;
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,16 +41,19 @@ public class ConsultaServlet extends HttpServlet {
 			out.println("<p>Tu consulta es: " + sqlStr + "</p>");
 			ResultSet rset = stmt.executeQuery(sqlStr);
 			
-			//Paso 5: Procesar el conjunto de registros resultante utilizando ResultSet
+			//Procesar el conjunto de registros resultante utilizando ResultSet
 			int count = 0;
 			while(rset.next()) {
 				out.println("<p>" + rset.getString("autor")
 				+ ", " + rset.getString("titulo")
 				+ ", " + rset.getDouble("precio") + "</p>");
-				
 				count++;
 			}
 			out.println("<p>=== " + count + " registros encontrados =====</p>");
+			
+			//Se recupera la variable contador del ServletContext
+			contador = (Integer)context.getAttribute("contador");
+			out.println("<p>=== " + contador.intValue() + " peticiones *.html ===</p>");
 			out.println("</body></html>");
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -78,9 +83,12 @@ public class ConsultaServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		
-		//Se leen los parámetros de inicialización del contexto
-		//Estos parámetros podrán ser utilizados por otros Servlet o JSP de la aplicación
-		ServletContext context = config.getServletContext();
+		//Se leen los parámetros de inicialización de Servlet y
+		//se convierten en atributos del contexto para compartirlos con
+		//cualquier servlet y JSP de la aplicación
+		//Se guarda el ServletContext que representa el contexto
+		//de la aplicación para usarlo en el doGet
+		context = config.getServletContext();
 		userName = context.getInitParameter("usuario");
 		password = context.getInitParameter("password");
 		url = context.getInitParameter("URLBaseDeDatos");
